@@ -13,6 +13,7 @@ phases:
       - echo Switching variables
       - echo `cat samTemplate.yaml`
       - sed "s|IDENTITYPROVIDER|${APP_CLIENT_ID}|g"  samTemplate.yaml > modified.yaml
+      - echo `cat modified.yaml`
       - mv modified.yaml samTempate.yaml
       - echo `cat samTemplate.yaml`
       - echo Compiling the Python code

@@ -1,0 +1,22 @@
+version: 0.1
+env:
+  variables:
+    BUCKET_NAME: "Bucket_Name"
+    PROVIDER_NAME: "cognito-idp.us-east-1.amazonaws.com/us-east-1_abcdefghi"
+    APP_CLIENT_ID: "app_client_id"
+phases:
+  install:
+    commands:
+      - echo Build started on `date`
+      - echo Switching variables
+      - echo `cat samTemplate.yaml`
+      - sed "s/IDENTITYPROVIDER/${PROVIDER_NAME}:${APP_CLIENT_ID}/g"  samTemplate.yaml > modified.yaml
+      - mv modified.yaml samTempate.yaml
+      - echo `cat samTemplate.yaml`
+      - echo Compiling the Python code
+      - aws cloudformation package --template-file samTemplate.yaml --s3-bucket $BUCKET_NAME 
+                                   --output-template-file NewSamTemplate.yaml
+artifacts:
+  type: zip
+  files:
+    - NewSamTemplate.yaml

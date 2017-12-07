@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >-
+  Amazon Cognito Identity Pool Roles and Role Attachment.
+Parameters:
+  CognitoIdentityPool:
+    Type: String
+
+Resources:
+  CognitoIdentityPoolAuthRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Join [ '', [ !Ref 'AWS::StackName', 'CognitoIdentityPoolAuthRole' ] ]
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          -
+            Effect: Allow
+            Principal: 
+              Service:
+                - "cognito-idp.amazonaws.com"
+            Action: 
+            - 'sts:AssumeRole'
+          
+  CognitoIdentityPoolUnauthRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Join [ '', [ !Ref 'AWS::StackName', 'CognitoIdentityPoolUnauthRole' ] ]
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          -
+            Effect: Allow
+            Principal: 
+              Service:
+                - "cognito-idp.amazonaws.com"
+            Action: 
+            - 'sts:AssumeRole'
+
+  RoleAttachment:
+    Type: 'AWS::Cognito::IdentityPoolRoleAttachment'
+    Properties:
+      IdentityPoolId: !Ref CognitoIdentityPool  
+      Roles: 
+        authenticated: !GetAtt CognitoIdentityPoolAuthRole.Arn
+        unauthenticated: !GetAtt CognitoIdentityPoolUnauthRole.Arn
+      RoleMappings:
+        IDENTITYPROVIDER: 
+          AmbiguousRoleResolution: Deny
+          Type: Token

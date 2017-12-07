@@ -10,7 +10,7 @@ Resources:
   CognitoIdentityPoolAuthRole:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Join [ '', [ !Ref 'AWS::StackName', 'CognitoIdentityPoolAuthRole' ] ]
+      RoleName: !Join [ '', [ !Ref 'AWS::StackName', 'Auth' ] ]
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -25,7 +25,7 @@ Resources:
   CognitoIdentityPoolUnauthRole:
     Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: !Join [ '', [ !Ref 'AWS::StackName', 'CognitoIdentityPoolUnauthRole' ] ]
+      RoleName: !Join [ '', [ !Ref 'AWS::StackName', 'Unauth' ] ]
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 

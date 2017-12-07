@@ -8,6 +8,8 @@ phases:
   install:
     commands:
       - echo Build started on `date`
+      - echo Provider Name is ${PROVIDER_NAME}
+      - echo App Client ID is ${APP_CLIENT_ID}
       - echo Switching variables
       - echo `cat samTemplate.yaml`
       - sed "s/IDENTITYPROVIDER/${PROVIDER_NAME}:${APP_CLIENT_ID}/g"  samTemplate.yaml > modified.yaml

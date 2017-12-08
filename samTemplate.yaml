@@ -1,50 +1,64 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: >-
-  Amazon Cognito Identity Pool Roles and Role Attachment.
+  Amazon Cognito Identity Pool, Roles, and Role Attachment.
 Parameters:
-  CognitoIdentityPool:
+  CognitoIdentityPoolName:
+    Type: String
+  CognitoUserPoolClientID:
+    Type: String
+  CognitoUserPoolProviderName:
     Type: String
 
 Resources:
+  CognitoIdentityPool:
+    Type: 'AWS::Cognito::IdentityPool'
+    Properties:
+      IdentityPoolName: !Ref CognitoIdentityPoolName
+      AllowUnauthenticatedIdentities: false
+      CognitoIdentityProviders:
+        ClientId: !Ref CognitoUserPoolClientID
+        ProviderName: !Ref CognitoUserPoolProviderName
+        ServerSideTokenCheck: true
+
   CognitoIdentityPoolAuthRole:
     Type: 'AWS::IAM::Role'
     Properties:
       RoleName: !Join [ '', [ !Ref 'AWS::StackName', 'Auth' ] ]
-      AssumeRolePolicyDocument: 
+      AssumeRolePolicyDocument:
         Version: "2012-10-17"
-        Statement: 
+        Statement:
           -
             Effect: Allow
-            Principal: 
+            Principal:
               Service:
                 - "cognito-idp.amazonaws.com"
-            Action: 
+            Action:
             - 'sts:AssumeRole'
-          
+
   CognitoIdentityPoolUnauthRole:
     Type: 'AWS::IAM::Role'
     Properties:
       RoleName: !Join [ '', [ !Ref 'AWS::StackName', 'Unauth' ] ]
-      AssumeRolePolicyDocument: 
+      AssumeRolePolicyDocument:
         Version: "2012-10-17"
-        Statement: 
+        Statement:
           -
             Effect: Allow
-            Principal: 
+            Principal:
               Service:
                 - "cognito-idp.amazonaws.com"
-            Action: 
+            Action:
             - 'sts:AssumeRole'
 
   RoleAttachment:
     Type: 'AWS::Cognito::IdentityPoolRoleAttachment'
     Properties:
-      IdentityPoolId: !Ref CognitoIdentityPool  
-      Roles: 
+      IdentityPoolId: !Ref CognitoIdentityPool
+      Roles:
         authenticated: !GetAtt CognitoIdentityPoolAuthRole.Arn
         unauthenticated: !GetAtt CognitoIdentityPoolUnauthRole.Arn
       RoleMappings:
-        IDENTITYPROVIDER: 
+        IDENTITYPROVIDER:
           AmbiguousRoleResolution: Deny
           Type: Token

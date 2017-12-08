@@ -67,3 +67,5 @@ Outputs:
   CognitoIdentityPoolID:
     Description: The ID for the Cognito Identity Pool
     Value: !Ref CognitoIdentityPool
+    Export:
+      Name: !Join [ '-', [ !Ref CognitoIdentityPoolName, 'IdentityPoolID' ] ]

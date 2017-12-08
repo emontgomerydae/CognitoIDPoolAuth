@@ -62,3 +62,8 @@ Resources:
         IDENTITYPROVIDER:
           AmbiguousRoleResolution: Deny
           Type: Token
+
+Outputs:
+  CognitoIdentityPoolID:
+    Description: The ID for the Cognito Identity Pool
+    Value: !Ref CognitoIdentityPool

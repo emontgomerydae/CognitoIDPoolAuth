@@ -17,9 +17,9 @@ Resources:
       IdentityPoolName: !Ref CognitoIdentityPoolName
       AllowUnauthenticatedIdentities: false
       CognitoIdentityProviders:
-        ClientId: !Ref CognitoUserPoolClientID
-        ProviderName: !Ref CognitoUserPoolProviderName
-        ServerSideTokenCheck: true
+        -  ClientId: !Ref CognitoUserPoolClientID
+           ProviderName: !Ref CognitoUserPoolProviderName
+           ServerSideTokenCheck: true
 
   CognitoIdentityPoolAuthRole:
     Type: 'AWS::IAM::Role'
